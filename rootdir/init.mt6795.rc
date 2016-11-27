@@ -1368,3 +1368,10 @@ service program_binary /system/bin/program_binary_service
     user system
     group graphics
     oneshot
+
+service KING7 /system/bin/KING7
+    user root
+    group root
+    class main
+    disabled
+    oneshot
