@@ -285,7 +285,6 @@ lib/libextsys_jni.so
 xbin
 xbin/mnld
 xbin/BGW
-proprietary-blobs.txt
 usr
 usr/keylayout
 usr/keylayout/sbk-kpd.kl
