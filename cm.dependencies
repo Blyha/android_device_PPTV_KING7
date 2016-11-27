@@ -1,0 +1,10 @@
+[
+  {
+    "repository": "android_vendor_pptv_king7",
+    "target_path": "vendor/PPTV/KING7"
+  },
+  {
+    "repository": "android_vendor_mediatek",
+    "target_path": "vendor/mediatek"
+  }
+]
