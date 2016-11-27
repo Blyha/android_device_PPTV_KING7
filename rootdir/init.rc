@@ -9,14 +9,9 @@ import /init.usb.rc
 import /init.${ro.hardware}.rc
 import /init.${ro.zygote}.rc
 import /init.trace.rc
-# Include CM's extra init file
 import /init.cm.rc
-import /init.KING7.power.rc
-import /init.storage.rc
-import /init.modem.rc
 
 on early-init
-
     # Set init and its forked children's oom_adj.
     write /proc/1/oom_score_adj -1000
 
@@ -128,7 +123,7 @@ loglevel 6 ####
     chown system system /dev/cpuctl/tasks
     chmod 0666 /dev/cpuctl/tasks
     write /dev/cpuctl/cpu.shares 1024
-    write /dev/cpuctl/cpu.rt_runtime_us 950000
+    write /dev/cpuctl/cpu.rt_runtime_us 800000
     write /dev/cpuctl/cpu.rt_period_us 1000000
 
     mkdir /dev/cpuctl/bg_non_interactive
@@ -157,45 +152,9 @@ loglevel 6 ####
     mount pstore pstore /sys/fs/pstore
     chown system log /sys/fs/pstore/console-ramoops
     chmod 0440 /sys/fs/pstore/console-ramoops
+
 	# ion device
 	chmod 0666 /dev/ion
-
-	chmod 0660 /sys/bus/platform/drivers/gsensor/cpsdata 
-	chmod 0660 /sys/bus/platform/drivers/gsensor/cpsrange 
-	chmod 0660 /sys/bus/platform/drivers/gsensor/cpsbandwidth 
-	chmod 0660 /sys/bus/platform/drivers/gsensor/cpsopmode 
-	chmod 0660 /sys/bus/platform/drivers/gsensor/fifo_mode 
-	chmod 0660 /sys/bus/platform/drivers/gsensor/fifo_data_frame 
-	chmod 0660 /sys/bus/platform/drivers/gsensor/fifo_framecount 
-	chown system system /sys/bus/platform/drivers/gsensor/cpsdata 
-	chown system system /sys/bus/platform/drivers/gsensor/cpsrange 
-	chown system system /sys/bus/platform/drivers/gsensor/cpsbandwidth 
-	chown system system /sys/bus/platform/drivers/gsensor/cpsopmode 
-	chown system system /sys/bus/platform/drivers/gsensor/fifo_mode 
-	chown system system /sys/bus/platform/drivers/gsensor/fifo_data_frame 
-	chown system system /sys/bus/platform/drivers/gsensor/fifo_framecount 
-	#add for mag 
-	chmod 0660 /sys/bus/platform/drivers/msensor/rawdata 
-	chown system system /sys/bus/platform/drivers/msensor/rawdata 
-
-	chmod 0660 /sys/bus/platform/drivers/msensor/daemon
-	chown system system /sys/bus/platform/drivers/msensor/daemon
-
-	#add for gyro 
-	chmod 0660 /sys/bus/platform/drivers/gyroscope/rawdata 
-	chmod 0660 /sys/bus/platform/drivers/gyroscope/datarate 
-	chmod 0660 /sys/bus/platform/drivers/gyroscope/range 
-	chmod 0660 /sys/bus/platform/drivers/gyroscope/powermode 
-	chmod 0660 /sys/bus/platform/drivers/gyroscope/fifo_mode 
-	chmod 0660 /sys/bus/platform/drivers/gyroscope/fifo_data_frame 
-	chmod 0660 /sys/bus/platform/drivers/gyroscope/fifo_framecount 
-	chown system system /sys/bus/platform/drivers/gyroscope/rawdata 
-	chown system system /sys/bus/platform/drivers/gyroscope/datarate 
-	chown system system /sys/bus/platform/drivers/gyroscope/range 
-	chown system system /sys/bus/platform/drivers/gyroscope/powermode 
-	chown system system /sys/bus/platform/drivers/gyroscope/fifo_mode 
-	chown system system /sys/bus/platform/drivers/gyroscope/fifo_data_frame
-	chown system system /sys/bus/platform/drivers/gyroscope/fifo_framecount
 
 # Healthd can trigger a full boot from charger mode by signaling this
 # property when the power button is held.
@@ -296,7 +255,6 @@ on post-fs-data
     # create basic filesystem structure
     mkdir /data/misc 01771 system misc
     mkdir /data/misc/adb 02750 system shell
-    mkdir /data/misc/audit 02750 audit system
     mkdir /data/misc/bluedroid 0770 bluetooth net_bt_stack
     mkdir /data/misc/bluetooth 0770 system system
     mkdir /data/misc/keystore 0700 keystore keystore
@@ -343,7 +301,8 @@ on post-fs-data
 
     # create directory for DRM plug-ins - give drm the read/write access to
     # the following directory.
-    mkdir /data/drm 0770 drm drm
+    mkdir /data/drm 0770 drm drm ####
+    # mkdir /data/drm 0774 drm system ####
 
     # create directory for MediaDrm plug-ins - give drm the read/write access to
     # the following directory.
@@ -366,15 +325,16 @@ on post-fs-data
 
     # Set SELinux security contexts on upgrade or policy update.
     restorecon_recursive /data
-    restorecon /data/data
-    restorecon /data/user
-    restorecon /data/user/0
 
     # If there is no fs-post-data action in the init.<device>.rc file, you
     # must uncomment this line, otherwise encrypted filesystems
     # won't work.
     # Set indication (checked by vold) that we have finished this action
     #setprop vold.post_fs_data_done 1
+
+    # add for IR
+    chmod 660 /dev/remote_ctrl_dev
+    chown system system /dev/remote_ctrl_dev
 
 on boot
     # basic network init
@@ -445,7 +405,6 @@ on boot
     chown system system /sys/class/timed_output/vibrator/enable
     chown system system /sys/class/leds/keyboard-backlight/brightness
     chown system system /sys/class/leds/lcd-backlight/brightness
-    chown system system /sys/class/leds/torch-light/brightness
     chown system system /sys/class/leds/button-backlight/brightness
     chown system system /sys/class/leds/jogball-backlight/brightness
     chown system system /sys/class/leds/red/brightness
@@ -454,16 +413,6 @@ on boot
     chown system system /sys/class/leds/red/device/grpfreq
     chown system system /sys/class/leds/red/device/grppwm
     chown system system /sys/class/leds/red/device/blink
-# LEDS
-chown system  system  /sys/class/leds/yellow/brightness
-chown system  system  /sys/class/leds/white/brightness
-chown system  system   /sys/class/leds/cyan/brightness
-chown system  system  /sys/class/leds/violet/brightness
-chown system  system  /sys/class/leds/yellow/trigger
-chown system  system  /sys/class/leds/white/trigger
-chown system  system  /sys/class/leds/cyan/trigger
-chown system  system  /sys/class/leds/violet/trigger
-
     chown system system /sys/class/timed_output/vibrator/enable
     chown system system /sys/module/sco/parameters/disable_esco
     chown system system /sys/kernel/ipv4/tcp_wmem_min
@@ -473,11 +422,10 @@ chown system  system  /sys/class/leds/violet/trigger
     chown system system /sys/kernel/ipv4/tcp_rmem_def
     chown system system /sys/kernel/ipv4/tcp_rmem_max
     chown root radio /proc/cmdline
-	chown system root /sys/class/input/input9/mag_hard_offset
-	chmod 0660 /sys/class/input/input9/mag_hard_offset
 
     # Define default initial receive window size in segments.
     setprop net.tcp.default_init_rwnd 60
+    setprop persist.service.usage 0
 
     class_start core
 
@@ -556,12 +504,7 @@ service console /system/bin/sh
     console
     disabled
     user shell
-    group shell log
     seclabel u:r:shell:s0
-
-service auditd /system/bin/auditd -k
-    seclabel u:r:logd:s0
-    class main
 
 on property:ro.debuggable=1
     start console
@@ -573,13 +516,6 @@ service adbd /sbin/adbd --root_seclabel=u:r:su:s0
     disabled
     seclabel u:r:adbd:s0
 
-service bmi160d /system/bin/bmi160d
-    class main
-    user system
-    group system
-	
-#seclabel u:r:bmiakmd:s0
-	
 # adbd on at boot in emulator
 on property:ro.kernel.qemu=1
     start adbd
@@ -599,7 +535,6 @@ service servicemanager /system/bin/servicemanager
     onrestart restart media
     onrestart restart surfaceflinger
     onrestart restart drm
-    onrestart restart shelld
 
 service vold /system/bin/vold
     class core
@@ -668,7 +603,8 @@ service encrypt /system/bin/vdc --wait cryptfs enablecrypto inplace default
 service bootanim /system/bin/bootanimation
     class core
     user graphics
-    group graphics media audio
+#    group graphics audio ####
+    group graphics media audio ####
     disabled
     oneshot
 
@@ -680,11 +616,6 @@ service flash_recovery /system/bin/install-recovery.sh
     class main
     seclabel u:r:install_recovery:s0
     oneshot
-    disabled
-
-# update recovery if enabled
-on property:persist.sys.recovery_update=true
-    start flash_recovery
 
 service racoon /system/bin/racoon
     class main
@@ -725,25 +656,48 @@ service pre-recovery /system/bin/uncrypt
     class main
     disabled
     oneshot
-#add by lizhiye, for atmel tp
-on post-fs-data
-chown root root /system/bin/init.atmel_ts.sh
-chmod 777 /system/bin/init.atmel_ts.sh
 
-#yangchao for xiaomikey ta
-chmod 777 system/bin/tlcMkm
+# usage on at boot in emulator
+on property:ro.kernel.qemu=1
+    start usage
 
-#yangchao for read otp data
-chmod 777 system/bin/getuuid
- 
-service atmel_ts /system/bin/init.atmel_ts.sh
-class main
-user root
-oneshot
-#endif
+#on property:sys.boot_completed=1
+#   start usage
 
-# add by GOODIX for fingerprint begin
-service fpDaemon /system/bin/gxFpDaemon
+on property:persist.service.usage.enable=1
+    start usage
+
+on property:persist.service.usage.enable=0
+    stop usage
+
+service usage /system/bin/usage
+     #socket usage stream 600 system system
+     #user vpn
+     #group vpn net_admin inet net_raw
+     #oneshot
+     #disabled
+
+on property:persist.log.aplogd.enable=1
+    start aplogd
+
+on property:persist.log.aplogd.enable=0
+    stop aplogd
+
+# aplogd start/stop is controlled by the persist.log.aplogd.enable system property.
+service aplogd /system/bin/aplogd
+
+on property:persist.sys.led.enable=1
+    write /sys/class/leds/red/enable 1
+    write /sys/class/leds/green/enable 1
+    write /sys/class/leds/blue/enable 1
+
+on property:persist.sys.led.enable=0
+    write /sys/class/leds/red/enable 0
+    write /sys/class/leds/green/enable 0
+    write /sys/class/leds/blue/enable 0
+
+service preinstall /system/bin/preinstall.sh
     class main
+    user root
+    group root
     oneshot
-# add by GOODIX for finger print end

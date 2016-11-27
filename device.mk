@@ -58,54 +58,67 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml \
     $(LOCAL_PATH)/configs/audio_device.xml:system/etc/audio_device.xml \
     $(LOCAL_PATH)/configs/audio_policy.conf:system/etc/audio_policy.conf
-    
-# Bluetooth                            
+
+# Bluetooth
 PRODUCT_PACKAGES += \
-    audio.a2dp.default 
+    audio.a2dp.default
 PRODUCT_PACKAGES += \
     libbt-vendor
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/bt_did.conf:system/etc/bluetooth/bt_did.conf
-     
+
 # Keyboard layout
 PRODUCT_COPY_FILES += \
      $(LOCAL_PATH)/configs/mtk-kpd.kl:system/usr/keylayout/mtk-kpd.kl \
      $(LOCAL_PATH)/configs/ACCDET.kl:system/usr/keylayout/ACCDET.kl\
-     $(LOCAL_PATH)/configs/AVRCP.kl:system/usr/keylayout/AVRCP.kl      
+     $(LOCAL_PATH)/configs/AVRCP.kl:system/usr/keylayout/AVRCP.kl
 
-#Light    
+#Light
 #PRODUCT_PACKAGES += \
-     #lights.mt6795 
+     #lights.mt6795
 
 # Ramdisk
-#    $(LOCAL_PATH)/rootdir/charger:root/charger \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/enableswap.sh:root/enableswap.sh \
+    $(LOCAL_PATH)/rootdir/default.prop:root/default.prop \
     $(LOCAL_PATH)/rootdir/factory_init.project.rc:root/factory_init.project.rc \
     $(LOCAL_PATH)/rootdir/factory_init.rc:root/factory_init.rc \
-    $(LOCAL_PATH)/rootdir/fstab.charger:root/fstab.charger\
+    $(LOCAL_PATH)/rootdir/file_contexts:root/file_contexts \
     $(LOCAL_PATH)/rootdir/fstab.mt6795:root/fstab.mt6795 \
+		$(LOCAL_PATH)/rootdir/init:root/init \
     $(LOCAL_PATH)/rootdir/init.aee.rc:root/init.aee.rc \
-    $(LOCAL_PATH)/rootdir/init.modem.rc:root/init.modem.rc \
-    $(LOCAL_PATH)/rootdir/init.mt6795.rc:root/init.mt6795.rc \
-    $(LOCAL_PATH)/rootdir/init.mt6795.usb.rc:root/init.mt6795.usb.rc \
-    $(LOCAL_PATH)/rootdir/init.project.rc:root/init.project.rc \
-    $(LOCAL_PATH)/rootdir/init.KING7.rc:root/init.rc \
-    $(LOCAL_PATH)/rootdir/init.ssd.rc:root/init.ssd.rc \
-    $(LOCAL_PATH)/rootdir/init.xlog.rc:root/init.xlog.rc \
-    $(LOCAL_PATH)/rootdir/meta_init.modem.rc:root/meta_init.modem.rc \
-    $(LOCAL_PATH)/rootdir/meta_init.project.rc:root/meta_init.project.rc \
-    $(LOCAL_PATH)/rootdir/meta_init.rc:root/meta_init.rc \
-    $(LOCAL_PATH)/rootdir/init:root/init \
-    $(LOCAL_PATH)/rootdir/init.KING7.power.rc:root/init.KING7.power.rc \
-    $(LOCAL_PATH)/rootdir/init.storage.rc:root/init.storage.rc \
     $(LOCAL_PATH)/rootdir/init.cm.rc:root/init.cm.rc \
+		$(LOCAL_PATH)/rootdir/init.environ.rc:root/init.environ.rc \
+		$(LOCAL_PATH)/rootdir/init.modem.rc:root/init.modem.rc  \
+    $(LOCAL_PATH)/rootdir/init.mt6595.rc:root/init.mt6595.rc \
+		$(LOCAL_PATH)/rootdir/init.mt6795.rc:root/init.mt6795.rc \
+		$(LOCAL_PATH)/rootdir/init.mt6795.usb.rc:root/init.mt6795.usb.rc \
+		$(LOCAL_PATH)/rootdir/init.project.rc:root/init.project.rc \
+		$(LOCAL_PATH)/rootdir/init.rc:root/init.rc \
+		$(LOCAL_PATH)/rootdir/init.recovery.mt6795.rc:root/init.recovery.mt6795.rc \
+    $(LOCAL_PATH)/rootdir/init.ssd.rc:root/init.ssd.rc\
+    $(LOCAL_PATH)/rootdir/init.trace.rc:root/init.trace.rc \
+		$(LOCAL_PATH)/rootdir/init.usb.rc:root/init.usb.rc \
+		$(LOCAL_PATH)/rootdir/init.trace.rc:root/init.trace.rc \
+		$(LOCAL_PATH)/rootdir/init.xlog.rc:root/init.xlog.rc \
+		$(LOCAL_PATH)/rootdir/init.zygote32.rc:root/init.zygote32.rc \
+		$(LOCAL_PATH)/rootdir/init.zygote64_32.rc:root/init.zygote64_32.rc \
+		$(LOCAL_PATH)/rootdir/meta_init.modem.rc:root/meta_init.modem.rc \
+		$(LOCAL_PATH)/rootdir/meta_init.project.rc:root/meta_init.project.rc \
+		$(LOCAL_PATH)/rootdir/meta_init.rc:root/meta_init.rc \
+		$(LOCAL_PATH)/rootdir/property_contexts:root/property_contexts \
+		$(LOCAL_PATH)/rootdir/seapp_contexts:root/seapp_contexts \
+		$(LOCAL_PATH)/rootdir/selinux_version:root/selinux_version \
+		$(LOCAL_PATH)/rootdir/sepolicy:root/sepolicy \
+		$(LOCAL_PATH)/rootdir/service_contexts:root/service_contexts \
+		$(LOCAL_PATH)/rootdir/ueventd.rc:root/ueventd.rc \
+		$(LOCAL_PATH)/rootdir/recovery.fstab:root/recovery.fstab \
 
 # Telecom
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/apns-conf.xml:system/etc/apns-conf.xml \
     $(LOCAL_PATH)/configs/ecc_list.xml:system/etc/ecc_list.xml \
-    $(LOCAL_PATH)/configs/spn-conf.xml:system/etc/spn-conf.xml 
+    $(LOCAL_PATH)/configs/spn-conf.xml:system/etc/spn-conf.xml
 
 # Thermal
 #PRODUCT_COPY_FILES += \
@@ -113,8 +126,8 @@ PRODUCT_COPY_FILES += \
 #     $(LOCAL_PATH)/configs/thermal.conf:system/etc/.tp/thermal.conf \
 #     $(LOCAL_PATH)/configs/thermal.off.conf:system/etc/.tp/thermal.off.conf \
 #     $(LOCAL_PATH)/configs/.thermal_policy_00:system/etc/.tp/.thermal_policy_00 \
-#     $(LOCAL_PATH)/configs/.thermal_policy_01:system/etc/.tp/.thermal_policy_01 
-    
+#     $(LOCAL_PATH)/configs/.thermal_policy_01:system/etc/.tp/.thermal_policy_01
+
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/android.hardware.consumerir.xml:system/etc/permissions/android.hardware.consumerir.xml \
@@ -148,7 +161,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
     frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml
 
-# Media	
+# Media
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
@@ -176,7 +189,7 @@ PRODUCT_PACKAGES += \
     dhcpcd.conf \
     wpa_supplicant \
     wpa_supplicant.conf
-    
+
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/hostapd/hostapd_default.conf:system/etc/hostapd/hostapd_default.conf \
     $(LOCAL_PATH)/configs/hostapd/hostapd.accept:system/etc/hostapd/hostapd.accept \
@@ -237,7 +250,7 @@ PRODUCT_PACKAGES += \
     setup_fs \
     ext4_resize \
     resize_ext4 \
-    superumount 
+    superumount
 
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=8
 

@@ -8,18 +8,12 @@ import init.ssd.rc
 import init.no_ssd.rc
 import init.ssd_nomuser.rc
 import init.fon.rc
-import init.volte.rc
-import init.trustonic.rc
 
 on init
 
     # BATTERY proc
-    chown radio system /proc/mtk_battery_cmd/current_cmd
-    chown radio system /proc/mtk_battery_cmd/discharging_cmd
-    chown radio system /proc/mtk_battery_cmd/battery_cmd
-    chmod 0664 /proc/mtk_battery_cmd/current_cmd
-    chmod 0664 /proc/mtk_battery_cmd/discharging_cmd
-    chmod 0664 /proc/mtk_battery_cmd/battery_cmd
+    chown shell system /proc/mtk_battery_cmd/current_cmd
+    chown shell system /proc/mtk_battery_cmd/discharging_cmd
 
     export USBOTG_STORAGE /storage/usbotg
     mkdir /protect_f 0771 system system
@@ -29,8 +23,6 @@ on init
     mkdir /cache 0770 system cache
     #Create CIP mount point
     mkdir /custom
-
-    chmod 0666 /dev/kmsg
 
     mkdir /mnt/cd-rom 0000 system system
 
@@ -51,9 +43,11 @@ on init
 
 on charger
     mount ext4 /dev/block/platform/mtk-msdc.0/by-name/system /system ro wait
-    start fuelgauged
     start kpoc_charger
     start servicemanager
+
+    # disable USB
+    write /sys/class/udc/musb-hdrc/device/cmode 0
 
     # md32 boot
     chown root system /dev/md32
@@ -65,7 +59,7 @@ on charger
 # mount different fs start
 on fs
     write /proc/bootprof "INIT:Mount_START"
-    mount_all /fstab.mt6795
+    mount_all /fstab.mt6595
     exec /system/bin/tune2fs -O has_journal -u 10010 -r 4096 /dev/block/platform/mtk-msdc.0/by-name/userdata
 
 # change partition permissions
@@ -102,7 +96,7 @@ on post-fs
     chmod 0770 /protect_s
     # once everything is setup, no need to modify /
     mount rootfs rootfs / ro remount
-
+    
     chown system system /system/bin/sbchk
     chmod 0771 /system/bin/sbchk
 
@@ -153,15 +147,6 @@ on post-fs
     chown system system /proc/bootprof
     chown root system /proc/mtprof/cputime
     chown root system /proc/mtprof/reboot_pid
-    chown system system /proc/mtprof/gpu_freq
-
-    #change permission for ALPS02343844
-    chmod 664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-    chown root system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-    chmod 664 /proc/ptp/PTP_DET_CPU/ptp_debug
-    chown root system /proc/ptp/PTP_DET_CPU/ptp_debug
-    chmod 664 /sys/bus/platform/devices/da9210-user/da9210_access
-    chown root system /sys/bus/platform/devices/da9210-user/da9210_access
 
 on post-fs-data
 
@@ -178,7 +163,7 @@ on post-fs-data
 
     mkdir /data/drm/wv 0770 drm system
 
-    # GPS
+# GPS
     mkdir /data/gps_mnl 0771 gps system
 
     # NFC
@@ -307,6 +292,7 @@ on post-fs-data
     chown system system /sys/class/misc/m_gyro_misc/gyrodelay
     chown system system /sys/class/misc/m_gyro_misc/gyrobatch
     chown system system /sys/class/misc/m_gyro_misc/gyroflush
+
     chmod 0660 /sys/class/misc/m_alsps_misc/alsactive
     chmod 0660 /sys/class/misc/m_alsps_misc/alsdelay
     chmod 0660 /sys/class/misc/m_alsps_misc/alsbatch
@@ -370,8 +356,6 @@ on post-fs-data
     chown system /sys/devices/platform/msensor/driver/cpsreptz
 
     mkdir       /data/data/mcube 0664 system system
-    # GPIO
-    chmod 0664 /dev/mtgpio
 
     # SPM SODI Enable
     chown media /proc/mcdi/sodi_en
@@ -414,7 +398,6 @@ on post-fs-data
     mkdir /data/misc/ppp 0770 bluetooth net_bt
 
     # Android SEC related device nodes
-    mknod /dev/sec c 182 0
     chmod 0660 /dev/sec
     chown root system /dev/sec
 
@@ -472,9 +455,6 @@ on post-fs-data
     chmod 0660 /dev/mtk_disp_mgr
     chown system graphics /dev/mtk_disp_mgr
 
-    chmod 0660 /dev/mtkfb_vsync
-    chown system graphics /dev/mtkfb_vsync
-
     #Camera
     chmod 0660 /dev/camera-sysram
     chmod 0660 /dev/camera-isp
@@ -484,11 +464,7 @@ on post-fs-data
     chmod 0660 /dev/kd_camera_flashlight
     chmod 0660 /dev/kd_camera_hw_bus2
     chmod 0660 /dev/FM50AF
-    chmod 0660 /dev/BU6429AF
     chmod 0660 /dev/CAM_CAL_DRV
-    chmod 0660 /dev/S5K3M2_CAM_CAL_DRV 
-    chmod 0660 /dev/S5K3M2_OFG_CAM_CAL_DRV
-    chmod 0660 /dev/S5K3M2_SY_CAM_CAL_DRV
 
     chown system camera /dev/camera-sysram
     chown system camera /dev/camera-isp
@@ -498,11 +474,7 @@ on post-fs-data
     chown system camera /dev/kd_camera_flashlight
     chown system camera /dev/kd_camera_hw_bus2
     chown system camera /dev/FM50AF
-    chown system camera /dev/BU6429AF
     chown system camera /dev/CAM_CAL_DRV
-    chown system camera /dev/S5K3M2_CAM_CAL_DRV
-    chown system camera /dev/S5K3M2_OFG_CAM_CAL_DRV
-    chown system camera /dev/S5K3M2_SY_CAM_CAL_DRV
 
     #MATV
     chmod 0660 /dev/MATV
@@ -523,9 +495,6 @@ on post-fs-data
     chmod 0660 /dev/MTK_SMI
     chown system media /dev/MTK_SMI
 
-    # RRC
-    chmod 0660 /dev/mtk_rrc
-    chown system media /dev/mtk_rrc
     #mtk_sched
     chmod 0660 /dev/mtk_sched
     chown system media /dev/mtk_sched
@@ -557,13 +526,6 @@ on post-fs-data
 
     # AGPS
     mkdir /data/agps_supl 0771 gps system
-
-    # secure memory
-    chown system system /proc/secmem0
-
-    # mcDriverDaemon
-    mkdir /data/app/mcRegistry 0770 system system
-    mkdir /data/app/mcRegistry/TbStorage 0770 system system
 
     # Recycle stuffs
     exec /system/bin/rm -f /cache/.ipoh.img
@@ -619,17 +581,6 @@ on boot
     chown system system /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
     chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
 
-    chown system system /d/ged/hal/total_gpu_freq_level_count
-    chmod 0660 /d/ged/hal/total_gpu_freq_level_count
-    chown system system /d/ged/hal/custom_boost_gpu_freq
-    chmod 0660 /d/ged/hal/custom_boost_gpu_freq
-    chown system system /d/ged/hal/custom_upbound_gpu_freq
-    chmod 0660 /d/ged/hal/custom_upbound_gpu_freq
-
-# Smartbook Handler Framework
-    chown system system /sys/power/sb_state
-    chmod 0660 /sys/power/sb_state
-
 # HMP CPU hotplug strategy
     chown system system /proc/hps/num_base_perf_serv
     chmod 0660 /proc/hps/num_base_perf_serv
@@ -643,6 +594,10 @@ on boot
     chmod 0660 /proc/cpufreq/cpufreq_limited_by_hevc
     chown system system /proc/cpufreq/cpufreq_limited_max_freq_by_user
     chmod 0660 /proc/cpufreq/cpufreq_limited_max_freq_by_user
+    chown system system /proc/cpufreq/MT_CPU_DVFS_BIG/cpufreq_limited_by_hevc
+    chmod 0660 /proc/cpufreq/MT_CPU_DVFS_BIG/cpufreq_limited_by_hevc
+    chown system system /proc/cpufreq/MT_CPU_DVFS_BIG/cpufreq_limited_max_freq_by_user
+    chmod 0660 /proc/cpufreq/MT_CPU_DVFS_BIG/cpufreq_limited_max_freq_by_user
     chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
     chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
     chmod 0660 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
@@ -668,6 +623,14 @@ on boot
     chown radio system /sys/power/tuxonice/do_hibernate
     chmod 0770 /sys/power/tuxonice
     chmod 0220 /sys/power/tuxonice/do_hibernate
+
+# Smartbook Handler Framework
+    chown system system /sys/power/sb_state
+    chmod 0660 /sys/power/sb_state
+
+# HMP CPU hotplug strategy
+    chown system system /proc/hps/num_base_perf_serv
+    chmod 0660 /proc/hps/num_base_perf_serv
 
 # Define TCP buffer sizes for various networks
 #   ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
@@ -704,7 +667,7 @@ on boot
     chown root radio /proc/net/netfilter/nfnetlink_queue
 
     chown radio system /proc/cpufreq/cpufreq_cur_freq
-    #chown radio system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+    chown radio system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 
 # WMT proc
 		chown shell system /proc/driver/wmt_dbg
@@ -737,7 +700,7 @@ on property:vold.decrypt=trigger_restart_framework
     start start_modem
     start msensord
     start permission_check
-
+		
 on property:vold.decrypt=trigger_shutdown_framework
     start stop_modem
 
@@ -757,7 +720,7 @@ on property:persist.uartconsole.enable=1
 
 # Update the second boot logo
 service bootlogoupdater /system/bin/boot_logo_updater
-    class main
+    class core
     oneshot
 
 service mobile_log_d /system/bin/mobile_log_d
@@ -772,7 +735,7 @@ service bugreport /system/bin/dumpstate -d -p -B \
 	disabled
 	oneshot
 
-# IMG GPU init
+# SGX init
 service pvrsrvctl /system/vendor/bin/pvrsrvctl --no-module --start
     class main
     user root
@@ -845,6 +808,7 @@ service rbfota /system/bin/fota1
 #
 # MT6620 related services (Begin)
 #
+
 # For WiFi High Speed calibration
 service autokd /system/bin/autokd
     class core
@@ -1308,15 +1272,9 @@ service thermald /system/bin/thermald
     user system
     group system
 
-service fuelgauged /system/bin/fuelgauged
-    class main
-    user system
-    group system
-
 service sn /system/bin/sn
-    class late_start
-    user system
-    group system sdcard_r
+    class main
+    user root
     oneshot
 
 service backuprestore /system/bin/br_app_data_service
@@ -1356,7 +1314,7 @@ service guiext-server /system/bin/guiext-server
 service kpoc_charger /system/bin/kpoc_charger
     class charger
 
-service sbchk /system/bin/sbchk
+service sbchk /system/bin/sbchk 
     class core
     user system
     group system

@@ -1,10 +1,10 @@
 on boot
-    setprop sys.usb.vid 2717
-    write /sys/class/android_usb/android0/iManufacturer PPTV
+    setprop sys.usb.vid 0E8D
+    write /sys/class/android_usb/android0/iManufacturer MediaTek
     write /sys/class/android_usb/android0/iProduct ${ro.product.model}
     write /sys/class/android_usb/android0/iSerial ${ro.serialno}
     write /sys/class/android_usb/android0/f_rndis/wceis 1
-    write /sys/class/android_usb/android0/f_rndis/manufacturer PPTV
+    write /sys/class/android_usb/android0/f_rndis/manufacturer MediaTek
     write /sys/class/android_usb/android0/f_rndis/vendorID ${sys.usb.vid}
     chown system system /sys/class/android_usb/android0/f_acm/port_index
     chmod 0660 /sys/class/android_usb/android0/f_acm/port_index
@@ -30,10 +30,9 @@ on property:sys.usb.config=acm
 on property:sys.usb.config=adb
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
-    write /sys/class/android_usb/android0/idProduct ff08
+    write /sys/class/android_usb/android0/idProduct 201C
     write /sys/class/android_usb/android0/functions ${sys.usb.config}
     write /sys/class/android_usb/android0/enable 1
-    start mdbd
     start adbd
     setprop sys.usb.state ${sys.usb.config}
 
@@ -52,20 +51,18 @@ on property:sys.usb.config=adb,acm
 on property:sys.usb.config=mass_storage
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
-    write /sys/class/android_usb/android0/idProduct ff20
+    write /sys/class/android_usb/android0/idProduct 2002
     write /sys/class/android_usb/android0/functions ${sys.usb.config}
     write /sys/class/android_usb/android0/enable 1
-    start mdbd
     setprop sys.usb.state ${sys.usb.config}
 
 #5.mass_storage,adb
 on property:sys.usb.config=mass_storage,adb
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
-    write /sys/class/android_usb/android0/idProduct ff28
+    write /sys/class/android_usb/android0/idProduct 2003
     write /sys/class/android_usb/android0/functions ${sys.usb.config}
     write /sys/class/android_usb/android0/enable 1
-    start mdbd
     start adbd
     setprop sys.usb.state ${sys.usb.config}
 
@@ -73,10 +70,9 @@ on property:sys.usb.config=mass_storage,adb
 on property:sys.usb.config=mtp
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
-    write /sys/class/android_usb/android0/idProduct ff40
+    write /sys/class/android_usb/android0/idProduct 2008
     write /sys/class/android_usb/android0/functions ${sys.usb.config}
     write /sys/class/android_usb/android0/enable 1
-    start mdbd
     setprop sys.usb.state ${sys.usb.config}
 
 #7.mtp,acm
@@ -93,10 +89,9 @@ on property:sys.usb.config=mtp,acm
 on property:sys.usb.config=mtp,adb
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
-    write /sys/class/android_usb/android0/idProduct ff48
+    write /sys/class/android_usb/android0/idProduct 201D
     write /sys/class/android_usb/android0/functions mtp,adb
     write /sys/class/android_usb/android0/enable 1
-    start mdbd
     start adbd
     setprop sys.usb.state ${sys.usb.config}
 
@@ -115,20 +110,18 @@ on property:sys.usb.config=mtp,adb,acm
 on property:sys.usb.config=mtp,mass_storage
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
-    write /sys/class/android_usb/android0/idProduct ff60
+    write /sys/class/android_usb/android0/idProduct 2016
     write /sys/class/android_usb/android0/functions ${sys.usb.config}
     write /sys/class/android_usb/android0/enable 1
-    start mdbd
     setprop sys.usb.state ${sys.usb.config}
 
 #11.mtp,mass_storage,adb
 on property:sys.usb.config=mtp,mass_storage,adb
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
-    write /sys/class/android_usb/android0/idProduct ff68
+    write /sys/class/android_usb/android0/idProduct 2017
     write /sys/class/android_usb/android0/functions ${sys.usb.config}
     write /sys/class/android_usb/android0/enable 1
-    start mdbd
     start adbd
     setprop sys.usb.state ${sys.usb.config}
 
@@ -136,10 +129,9 @@ on property:sys.usb.config=mtp,mass_storage,adb
 on property:sys.usb.config=ptp
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
-    write /sys/class/android_usb/android0/idProduct ff10
+    write /sys/class/android_usb/android0/idProduct 200B
     write /sys/class/android_usb/android0/functions ${sys.usb.config}
     write /sys/class/android_usb/android0/enable 1
-    start mdbd
     setprop sys.usb.state ${sys.usb.config}
 
 #13.ptp,acm
@@ -156,10 +148,9 @@ on property:sys.usb.config=ptp,acm
 on property:sys.usb.config=ptp,adb
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
-    write /sys/class/android_usb/android0/idProduct ff18
+    write /sys/class/android_usb/android0/idProduct 200C
     write /sys/class/android_usb/android0/functions ${sys.usb.config}
     write /sys/class/android_usb/android0/enable 1
-    start mdbd
     start adbd
     setprop sys.usb.state ${sys.usb.config}
 
@@ -178,20 +169,18 @@ on property:sys.usb.config=ptp,adb,acm
 on property:sys.usb.config=ptp,mass_storage
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
-    write /sys/class/android_usb/android0/idProduct ff30
+    write /sys/class/android_usb/android0/idProduct 2015
     write /sys/class/android_usb/android0/functions ${sys.usb.config}
     write /sys/class/android_usb/android0/enable 1
-    start mdbd
     setprop sys.usb.state ${sys.usb.config}
 
 #17.ptp,mass_storage,adb
 on property:sys.usb.config=ptp,mass_storage,adb
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
-    write /sys/class/android_usb/android0/idProduct ff38
+    write /sys/class/android_usb/android0/idProduct 2014
     write /sys/class/android_usb/android0/functions ${sys.usb.config}
     write /sys/class/android_usb/android0/enable 1
-    start mdbd
     start adbd
     setprop sys.usb.state ${sys.usb.config}
 
@@ -199,11 +188,10 @@ on property:sys.usb.config=ptp,mass_storage,adb
 on property:sys.usb.config=rndis
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
-    write /sys/class/android_usb/android0/idProduct ff80
+    write /sys/class/android_usb/android0/idProduct 2004
     write /sys/class/android_usb/android0/functions ${sys.usb.config}
     write /sys/class/android_usb/android0/bDeviceClass 224
     write /sys/class/android_usb/android0/enable 1
-    start mdbd
     setprop sys.usb.state ${sys.usb.config}
 
 #19.rndis,acm
@@ -220,11 +208,10 @@ on property:sys.usb.config=rndis,acm
 on property:sys.usb.config=rndis,adb
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
-    write /sys/class/android_usb/android0/idProduct ff88
+    write /sys/class/android_usb/android0/idProduct 2005
     write /sys/class/android_usb/android0/functions ${sys.usb.config}
     write /sys/class/android_usb/android0/enable 1
     start adbd
-    start mdbd
     setprop sys.usb.state ${sys.usb.config}
 
 #21.rndis,adb,acm
@@ -362,13 +349,14 @@ on property:sys.usb.config=ptp,mass_storage,adb,acm
 
 #34.USB Charging Only configuration
 on property:sys.usb.config=charging
-    stop adbd
-    write /sys/class/android_usb/android0/enable 0
-    write /sys/class/android_usb/android0/idVendor ${sys.usb.vid}
-    write /sys/class/android_usb/android0/idProduct 2008
-    write /sys/class/android_usb/android0/functions mtp
-    write /sys/class/android_usb/android0/enable 1
     setprop sys.usb.state ${sys.usb.config}
+    setprop sys.usb.charging yes
+
+on property:sys.usb.charging=yes
+    write /sys/class/udc/musb-hdrc/device/cmode 2
+
+on property:sys.usb.charging=no
+    write /sys/class/udc/musb-hdrc/device/cmode 1
 
 #35.USB BICR configuration(mass_storage)
 on property:sys.usb.config=bicr
