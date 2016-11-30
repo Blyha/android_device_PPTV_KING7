@@ -15,6 +15,9 @@ cd ../..
 cd frameworks/opt/telephony
 git apply -v ../../../device/PPTV/KING7/patches/framework_opt_telephony/0001-Update-for-mtk.patch
 cd ../../..
+cd system/core/init
+git apply -v ../../../device/PPTV/KING7/patches/system_core_init/selinux_permissive.patch
+cd ../../..
 cd packages/services/Telephony
 git apply -v ../../../device/PPTV/KING7/patches/packages_services_Telpheony/0001-Update-for-mtk.patch
 cd ../../..
@@ -26,8 +29,8 @@ git apply -v ../../../../../../device/PPTV/KING7/patches/framework_base_core_res
 # git apply -v ../../../../../../device/PPTV/KING7/patches/framework_base_core_res_res_values/2_BLU_ButtonBacklight_Disable.patch
 croot
 #source build/envsetup.sh
-#breakfast KING7
-#mka bacon
+#lunch cm_KING7-eng
+#mka otapackage
 
 
 

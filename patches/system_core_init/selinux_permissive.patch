@@ -1,0 +1,13 @@
+diff --git init.c init.c
+index 1cce8d8..865afbf 100644
+--- init.c
++++ init.c
+@@ -1012,7 +1012,7 @@ static void selinux_initialize(void)
+     selinux_init_all_handles();
+     bool is_enforcing = selinux_is_enforcing();
+     INFO("SELinux: security_setenforce(%d)\n", is_enforcing);
+-    security_setenforce(is_enforcing);
++    //security_setenforce(is_enforcing);
+ }
+ 
+ static int charging_mode_booting(void)
